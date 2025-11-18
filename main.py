@@ -21,7 +21,9 @@ def gesture_callback(bluos_client: BluOSClient, prediction: Prediction):
 
 if __name__ == "__main__":
     with BluOSClient("192.168.2.9") as client:
-        GestureRecognizer(
+        recognizer = GestureRecognizer(
             "gesture_recognizer.task",
             gesture_callback=partial(gesture_callback, client),
         )
+        # TODO: Make this a command line argument
+        recognizer.record(visualize=True)

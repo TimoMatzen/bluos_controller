@@ -38,6 +38,7 @@ class GestureRecognizer:
         self.lock = threading.Lock()
         self.current_gestures = []
         self.gesture_callback = gesture_callback
+        self.num_hands = num_hands
 
         options = GestureRecognizerOptions(
             base_options=python.BaseOptions(model_asset_path=model_path),
