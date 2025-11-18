@@ -88,6 +88,8 @@ class GestureRecognizer:
                 break
 
         cap.release()
+        cv2.destroyAllWindows()
+        hands.close()
 
     def put_gestures(self, frame):
         """Puts the gestures on the frame."""
