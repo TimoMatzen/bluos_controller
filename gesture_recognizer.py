@@ -48,7 +48,7 @@ class GestureRecognizer:
         )
         self.recognizer = GestureRecognizer.create_from_options(options)
 
-    def record(self, visualize: bool = False, camera_index: int = -1):
+    def record(self, visualize: bool = False, camera_index: int = 0):
         timestamp = 0
         mp_drawing = mp.solutions.drawing_utils
         mp_hands = mp.solutions.hands
@@ -59,7 +59,7 @@ class GestureRecognizer:
             min_tracking_confidence=0.65,
         )
 
-        cap = cv2.VideoCapture(camera_index)
+        cap = cv2.VideoCapture(camera_index, cv2.CAP_V4L2)
 
         while True:
             ret, frame = cap.read()
