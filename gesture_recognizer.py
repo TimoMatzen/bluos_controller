@@ -48,7 +48,7 @@ class GestureRecognizer:
         )
         self.recognizer = GestureRecognizer.create_from_options(options)
 
-    def record(self, visualize: bool = False, camera_index: int = 0):
+    def record(self, visualize: bool = False, camera_index: int = 0, pi: bool = False):
         timestamp = 0
         mp_drawing = mp.solutions.drawing_utils
         mp_hands = mp.solutions.hands
@@ -59,12 +59,25 @@ class GestureRecognizer:
             min_tracking_confidence=0.65,
         )
 
-        cap = cv2.VideoCapture(camera_index, cv2.CAP_V4L2)
+        if pi:
+            from picamera2 import Picamera2
+
+            picam2 = Picamera2()
+            picam2.configure(
+                picam2.create_preview_configuration(main={"size": (1280, 720)})
+            )
+            picam2.start()
+
+        else:
+            cap = cv2.VideoCapture(camera_index, cv2.CAP_V4L2)
 
         while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
+            if pi:
+                frame = picam2.capture_array()
+            else:
+                ret, frame = cap.read()
+                if not ret:
+                    break
 
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             results = hands.process(frame)

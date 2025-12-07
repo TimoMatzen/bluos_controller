@@ -1,3 +1,4 @@
+import argparse
 from functools import partial
 
 from bluos_controller import BluOSClient
@@ -20,10 +21,15 @@ def gesture_callback(bluos_client: BluOSClient, prediction: Prediction):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog="BluosController", description="Controls the bluos device via the api."
+    )
+    parser.add_argument("-pi", "--raspberry", action="store_true")
+    parser.add_argument("-v", "--visualize", action="store_true")
+    args = parser.parse_args()
     with BluOSClient("192.168.2.9") as client:
         recognizer = GestureRecognizer(
             "gesture_recognizer.task",
             gesture_callback=partial(gesture_callback, client),
         )
-        # TODO: Make this a command line argument
-        recognizer.record(visualize=True)
+        recognizer.record(visualize=args.visualize, pi=args.raspberry)
